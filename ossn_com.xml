@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.opensource-socialnetwork.org/v/3.0">
+    <name>Notification Sample</name>
+    <id>NotificationSample</id>
+    <author>Rafael Amorim</author>
+    <description>Add sample notification message</description>
+    <license>GPL</license>
+    <author_url>https://www.rafaelamorim.com.br/</author_url>
+    <license_url>http://www.opensource-socialnetwork.org/licence</license_url>
+    <version>1.0</version>
+	<requires>
+		<type>ossn_version</type>
+		<version>6.0</version>
+	</requires>
+</component>
