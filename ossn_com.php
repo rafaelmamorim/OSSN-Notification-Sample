@@ -11,8 +11,15 @@
  *
  * Following instructions from https://www.opensource-socialnetwork.org/discussion/view/2967/how-to-send-notifications-to-users-using-ossnnotifications-class?offset=1
  * 
+ * By definition of the notification system, isn't allowed to user create a 
+ * self notification. So, to make this function, it's necessary to create a 
+ * dummy user and change "__notificationsample_dummy_guid__" value above. 
+ * I will keep in 1, but you need to change. Or test with another user account.
+ * Otherwise, OSSN show an error message.
  * 
  */
+ define('__notificationsample_dummy_guid__',1);
+ 
  function notificationsample_init(){
 	
 	//css
@@ -101,10 +108,23 @@ function addNotificationSampleAnnotation($type,$subject_guid){
         ossn_error_page();
     }
 	
+	//Dummy user cant send message to himself
+	if (__notificationsample_dummy_guid__ == ossn_loggedin_user()->guid){
+		ossn_trigger_message(ossn_print('notification:message:dummy:failed'), 'error');
+		redirect(REF); 
+	}
+	
 	switch ($pages[0]) {
         case 'myself':
 			$auxAnnotation = addNotificationSampleAnnotation('notification:message:tomyself','1');
-			$auxNotifications = $notifications->add('notification:message:tomyself',strval(ossn_loggedin_user()->guid),'1',$auxAnnotation,'111'); //
+
+			$who_sent_notification_guid = __notificationsample_dummy_guid__;
+			$who_will_receive_notification_guid = ossn_loggedin_user()->guid;
+
+			$subject_guid = $auxAnnotation;
+			$item_guid = NULL;
+			
+			$auxNotifications = $notifications->add('notification:message:tomyself', $who_sent_notification_guid, $auxAnnotation, $item_guid,  $who_will_receive_notification_guid);
 			
 			if ($auxAnnotation && $auxNotifications){
 				error_log("success!");
